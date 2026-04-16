@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anurag — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0e0e0e;
+      --paper: #f5f0e8;
+      --accent: #c8402b;
+      --accent2: #2b5bc8;
+      --muted: #7a7368;
+      --card-bg: #edeae0;
+      --border: rgba(14,14,14,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245, 240, 232, 0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.4rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 3rem;
+      gap: 4rem;
+      padding-top: 90px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: 'ANURAG';
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(120px, 20vw, 260px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(14,14,14,0.07);
+      bottom: -2rem;
+      left: -1rem;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-text { position: relative; }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1.5px;
+      background: var(--accent);
+    }
+
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3.2rem, 6vw, 6rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 2.4rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.9rem 2rem;
+      background: var(--ink);
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .hero-cta svg { transition: transform 0.2s; }
+    .hero-cta:hover svg { transform: translateX(4px); }
+
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2.8rem;
+      position: relative;
+      animation: floatCard 5s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 10px; left: 10px;
+      right: -10px; bottom: -10px;
+      border: 1px solid var(--border);
+      z-index: -1;
+    }
+
+    .hero-card-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.2rem;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .stat-num span { color: var(--accent); }
+
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .tag {
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--paper);
+      transition: all 0.2s;
+    }
+
+    .tag:hover {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 7rem 3rem; }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .section-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--border);
+      user-select: none;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--ink); color: var(--paper); }
+
+    #about .section-number { -webkit-text-stroke-color: rgba(245,240,232,0.1); }
+    #about .section-title { color: var(--paper); }
+    #about .section-title em { color: #f0a090; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: rgba(245,240,232,0.7);
+      margin-bottom: 1.4rem;
+    }
+
+    .about-text p strong {
+      color: var(--paper);
+      font-weight: 500;
+    }
+
+    .timeline { position: relative; padding-left: 1.8rem; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px; bottom: 8px;
+      width: 1px;
+      background: rgba(245,240,232,0.15);
+    }
+
+    .timeline-item { margin-bottom: 2.4rem; position: relative; }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.8rem; top: 6px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #f0a090;
+    }
+
+    .timeline-year {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #f0a090;
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-role {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--paper);
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-place {
+      font-size: 0.82rem;
+      color: rgba(245,240,232,0.5);
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--paper); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2.2rem;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(14,14,14,0.1);
+    }
+
+    .project-card:hover::after { transform: scaleX(1); }
+
+    .project-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--border);
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
+    }
+
+    .project-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .stack-chip {
+      padding: 0.22rem 0.65rem;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .project-arrow {
+      position: absolute;
+      top: 2rem; right: 2rem;
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .project-card:hover .project-arrow {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .project-card:hover .project-arrow svg path { stroke: white; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--card-bg); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-info p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-detail-icon {
+      width: 36px; height: 36px;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-icon svg { color: var(--paper); }
+
+    .contact-detail-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-detail-value {
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(14,14,14,0.3); }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+
+    .form-group textarea { height: 130px; }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.2rem;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+      align-self: flex-start;
+    }
+
+    .submit-btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Success message */
+    .form-success {
+      display: none;
+      padding: 1rem 1.4rem;
+      background: #d4edda;
+      border: 1px solid #a8d5b0;
+      color: #2d6a4f;
+      font-size: 0.88rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(245,240,232,0.4);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    footer a {
+      color: rgba(245,240,232,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--paper); }
+
+    footer .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--paper);
+      letter-spacing: 0.1em;
+    }
+
+    footer .footer-logo span { color: #f0a090; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-text > * {
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .hero-eyebrow { animation-delay: 0.1s; }
+    .hero-name { animation-delay: 0.25s; }
+    .hero-desc { animation-delay: 0.4s; }
+    .hero-cta { animation-delay: 0.55s; }
+
+    .hero-card {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      #hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 4rem; }
+      #hero::before { display: none; }
+      .hero-card { animation: none; opacity: 1; }
+      .about-grid, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      section { padding: 5rem 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero" class="nav-logo">AN<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Available for opportunities</p>
+    <h1 class="hero-name">
+      Anurag<br><em>Creates.</em>
+    </h1>
+    <p class="hero-desc">
+      A passionate developer & designer who builds thoughtful digital experiences — from pixel-perfect interfaces to robust backend systems.
+    </p>
+    <a href="#projects" class="hero-cta">
+      View My Work
+      <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="hero-card">
+    <p class="hero-card-label">Quick Stats</p>
+    <div class="stat-grid">
+      <div>
+        <div class="stat-num">12<span>+</span></div>
+        <div class="stat-label">Projects Done</div>
+      </div>
+      <div>
+        <div class="stat-num">3<span>+</span></div>
+        <div class="stat-label">Years Coding</div>
+      </div>
+      <div>
+        <div class="stat-num">8<span>+</span></div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Cups of Chai</div>
+      </div>
+    </div>
+    <div class="skill-tags">
+      <span class="tag">React</span>
+      <span class="tag">Node.js</span>
+      <span class="tag">Python</span>
+      <span class="tag">UI/UX</span>
+      <span class="tag">MongoDB</span>
+      <span class="tag">Figma</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 class="section-title">About <em>Me</em></h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Hey there! I'm <strong>Anurag</strong>, a full-stack developer based in India with a deep love for building products that are both functional and beautiful.</p>
+      <p>My journey started with curiosity — breaking things apart to understand how they worked. That curiosity turned into a career where I solve real problems through code, design, and a little bit of obsessive attention to detail.</p>
+      <p>When I'm not coding, I'm likely reading about <strong>system design</strong>, experimenting with new tech stacks, or hunting for the best chai in town.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2024 — Present</div>
+        <div class="timeline-role">Senior Frontend Developer</div>
+        <div class="timeline-place">Tech Startup, Noida</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2022 — 2024</div>
+        <div class="timeline-role">Full Stack Developer</div>
+        <div class="timeline-place">Digital Agency, Delhi NCR</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021 — 2022</div>
+        <div class="timeline-role">Freelance Developer</div>
+        <div class="timeline-place">Remote, Worldwide</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2018 — 2022</div>
+        <div class="timeline-role">B.Tech — Computer Science</div>
+        <div class="timeline-place">Dr. APJ Abdul Kalam Technical University</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 class="section-title">Selected <em>Projects</em></h2>
+  </div>
+  <div class="projects-grid">
+
+    <a href="#" class="project-card">
+      <div class="project-arrow">
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="#0e0e0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="project-num">01</div>
+      <h3 class="project-title">ShopEase — E-commerce Platform</h3>
+      <p class="project-desc">A full-featured online store with real-time inventory, payment gateway integration, and an admin dashboard with analytics.</p>
+      <div class="project-stack">
+        <span class="stack-chip">React</span>
+        <span class="stack-chip">Node.js</span>
+        <span class="stack-chip">MongoDB</span>
+        <span class="stack-chip">Stripe</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-arrow">
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="#0e0e0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="project-num">02</div>
+      <h3 class="project-title">TaskFlow — Project Management App</h3>
+      <p class="project-desc">A collaborative task manager with drag-and-drop boards, real-time updates via WebSockets, and team chat functionality.</p>
+      <div class="project-stack">
+        <span class="stack-chip">Next.js</span>
+        <span class="stack-chip">TypeScript</span>
+        <span class="stack-chip">PostgreSQL</span>
+        <span class="stack-chip">Socket.io</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-arrow">
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="#0e0e0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="project-num">03</div>
+      <h3 class="project-title">HealthTrack — Wellness Dashboard</h3>
+      <p class="project-desc">A personal health analytics dashboard integrating wearable data, visualising trends with custom D3.js charts.</p>
+      <div class="project-stack">
+        <span class="stack-chip">React</span>
+        <span class="stack-chip">Python</span>
+        <span class="stack-chip">FastAPI</span>
+        <span class="stack-chip">D3.js</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-arrow">
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="#0e0e0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="project-num">04</div>
+      <h3 class="project-title">LinguaBot — AI Language Tutor</h3>
+      <p class="project-desc">A conversational language learning app powered by LLMs with spaced-repetition flashcards and pronunciation scoring.</p>
+      <div class="project-stack">
+        <span class="stack-chip">Vue.js</span>
+        <span class="stack-chip">OpenAI API</span>
+        <span class="stack-chip">Firebase</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-arrow">
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="#0e0e0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="project-num">05</div>
+      <h3 class="project-title">Findigs — Real Estate Listings</h3>
+      <p class="project-desc">A property search platform with map-based browsing, advanced filters, virtual tours, and mortgage calculators.</p>
+      <div class="project-stack">
+        <span class="stack-chip">React</span>
+        <span class="stack-chip">GraphQL</span>
+        <span class="stack-chip">Mapbox</span>
+        <span class="stack-chip">AWS</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-arrow">
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+          <path d="M2 10L10 2M10 2H4M10 2v6" stroke="#0e0e0e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="project-num">06</div>
+      <h3 class="project-title">SnapStats — Social Analytics Tool</h3>
+      <p class="project-desc">A social media analytics dashboard aggregating data from multiple platforms into digestible reports and insights.</p>
+      <div class="project-stack">
+        <span class="stack-chip">Next.js</span>
+        <span class="stack-chip">Recharts</span>
+        <span class="stack-chip">Redis</span>
+        <span class="stack-chip">Tailwind</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 class="section-title">Get In <em>Touch</em></h2>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <p>Have a project in mind or just want to say hello? I'm always open to interesting conversations and new opportunities.</p>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+            <path d="M2 4l6 5 6-5M2 4h12v9H2V4z" stroke="#f5f0e8" stroke-width="1.3" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-value">anurag@example.com</div>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+            <path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" stroke="#f5f0e8" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Location</div>
+          <div class="contact-detail-value">Ghaziabad, Uttar Pradesh, India</div>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 0v7l4 2" stroke="#f5f0e8" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="contact-detail-label">Response Time</div>
+          <div class="contact-detail-value">Within 24 hours</div>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" placeholder="John" required />
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" placeholder="Doe" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="john@example.com" required />
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" placeholder="Project Inquiry" />
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Tell me about your project…" required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">
+        Send Message
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+          <path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="form-success" id="formSuccess">
+        ✓ Message sent! I'll get back to you within 24 hours.
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span class="footer-logo">AN<span>.</span></span>
+  <span>© 2026 Anurag. All rights reserved.</span>
+  <div style="display:flex; gap:1.5rem;">
+    <a href="#">GitHub</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Twitter</a>
+  </div>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.submit-btn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Sent ✓';
+      document.getElementById('formSuccess').style.display = 'block';
+      e.target.reset();
+      setTimeout(() => {
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        document.getElementById('formSuccess').style.display = 'none';
+      }, 4000);
+    }, 900);
+  }
+
+  // Subtle scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.project-card, .timeline-item, .contact-detail').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
